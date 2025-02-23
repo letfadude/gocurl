@@ -1,0 +1,7 @@
+GET http://localhost:8080/getToken
+
+{
+    "user_name":"Thomas",
+    "password":"password",
+    "app_id":2
+}

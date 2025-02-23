@@ -1,0 +1,8 @@
+POST http://localhost:8080/createPermission
+
+{
+    "user_name":"Thomas",
+    "password":"password",
+    "app_id":2,
+    "grants":"user"
+}
