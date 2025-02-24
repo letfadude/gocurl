@@ -38,6 +38,11 @@ func main(){
 	}
 	defer response.Body.Close()
 	
+	printResponse(response)
+}
+
+func printResponse(response *http.Response){
+
 	status := response.StatusCode
 	colorStr := "\033[36m"
 	if status >= 400 {
@@ -47,7 +52,9 @@ func main(){
 	// Print the response
 	fmt.Printf("%s================**HEADER**====================\033[0m\n", cyan)
 	fmt.Printf("Response Status: %s%s\033[0m\n",colorStr, response.Status)
-	fmt.Println("Response Headers:", response.Header)
+	for k, v := range(response.Header) {
+		fmt.Printf("%s: %s\n", k, v)
+	}
 
 	fmt.Printf("%s==================**BODY**====================\033[0m\n", cyan)
 	scanner := bufio.NewScanner(response.Body)
@@ -55,7 +62,6 @@ func main(){
 		fmt.Println(scanner.Text())
 	}
 	fmt.Printf("%s==============================================\033[0m\n", cyan)
-
 }
 
 func sendRequest(request *http.Request) (*http.Response,error) {
@@ -89,6 +95,8 @@ func buildRequest(file *os.File) (*http.Request, error){
 		return nil, err
 	}
 
+	// Write Header
+
 	for {
 		line, err = reader.ReadString('\n')
 		if err != nil {
@@ -100,7 +108,9 @@ func buildRequest(file *os.File) (*http.Request, error){
 		}
 		request.Header.Add(fields[0], fields[1])
 	}
-	
+
+	// Write Body
+
 	body := ""
 	for {
 		line, err := reader.ReadString('\n')
